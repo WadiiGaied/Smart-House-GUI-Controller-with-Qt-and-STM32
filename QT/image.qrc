@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/photo">
+        <file>logo_maison_intelligente.jpg</file>
+        <file>logo_hum.jpg</file>
+        <file>logo_temp.jpg</file>
+        <file>humi.png</file>
+        <file>hum.png</file>
+        <file>logo_clim.png</file>
+        <file>logo_led.jpg</file>
+    </qresource>
+</RCC>
