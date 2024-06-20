@@ -38,7 +38,7 @@ int* STM32::read_from_carte()
     serialdata = "";
     data = "";
     QList<int> values;
-    int* array = new int[3];
+    int* array = new int[4];
 
     if (serial->isReadable())
     {
@@ -49,7 +49,7 @@ int* STM32::read_from_carte()
             values.append(ch.unicode()); // Ajoute la valeur Unicode de chaque caractère à la liste
         }
 
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 4; ++i) {
             if (i < values.size())
                 array[i] = values[i];
             else
@@ -57,7 +57,7 @@ int* STM32::read_from_carte()
         }
 
         // Affiche chaque valeur dans le tableau
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 4; ++i) {
             qDebug() << "Value[" << i << "]:" << array[i];
         }
     }

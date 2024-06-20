@@ -42,7 +42,7 @@ void HOME::test_port()
 {    ret = S.connect_carte();
     qDebug() << "ret = " << ret ;
     if (ret == 0 ) {
-        QPixmap image("C:/Users/WADII/Desktop/csf/Smart_House/logo_connect.png");
+        QPixmap image("C:/Users/WADII/STM32CubeIDE/workspace_1.13.2/smart/QT/logo_connect.png");
         if (!image.isNull()) {
             int w = ui->image_connixon->width();
             int h = ui->image_connixon->height();
@@ -50,24 +50,24 @@ void HOME::test_port()
             ui->text_connixson->setText("Carte est Connecte");
             ui->text_connixson->setStyleSheet("QLabel { color: green; font: 900 10pt 'Segoe UI'; }");
         } else {
-            qDebug() << "Failed to load image: C:/Users/WADII/Desktop/csfProjet_1/logo_connect.png";
+            qDebug() << "Failed to load image:C:/Users/WADII/STM32CubeIDE/workspace_1.13.2/smart/QT/logo_connect.png";
         }
     } else {
-        QPixmap image("C:/Users/WADII/Desktop/csf/Smart_House/logo_dconnect .png");
+        QPixmap image("C:/Users/WADII/STM32CubeIDE/workspace_1.13.2/smart/QT/logo_dconnect .png");
         if (!image.isNull()) {
             int w = ui->image_connixon->width();
             int h = ui->image_connixon->height();
             ui->image_connixon->setPixmap(image.scaled(w, h, Qt::KeepAspectRatio));
             ui->text_connixson->setText("Carte Ne Pas Connecte");
             ui->text_connixson->setStyleSheet("QLabel { color: red; font: 900 10pt 'Segoe UI'; }");
-            QPixmap image("C:/Users/WADII/Desktop/csf/Smart_House/logo_led.jpg");
+            QPixmap image("C:/Users/WADII/STM32CubeIDE/workspace_1.13.2/smart/QT/logo_led.jpg");
              w = ui->image_led->width();
              h = ui->image_led->height();
             ui->image_led->setPixmap(image.scaled(w, h, Qt::KeepAspectRatio));
 
 
         } else {
-            qDebug() << "Failed to load image: C:/Users/WADII/Desktop/csfProjet_1/logo_dconnect.png";
+            qDebug() << "Failed to load image: C:/Users/WADII/STM32CubeIDE/workspace_1.13.2/smart/QT/logo_dconnect.png";
         }
     }
 }
@@ -90,14 +90,14 @@ void HOME::update_label()
     ui->lcd_fan->display(data[3]);
     if (data[2]==1)
     {
-       QPixmap image("C:/Users/WADII/Desktop/csf/Smart_House/led_on.png");
+       QPixmap image("C:/Users/WADII/STM32CubeIDE/workspace_1.13.2/smart/QT/led_on.png");
         int w = ui->image_led->width();
         int h = ui->image_led->height();
         ui->image_led->setPixmap(image.scaled(w, h, Qt::KeepAspectRatio));
     }
     else
     {
-        QPixmap image("C:/Users/WADII/Desktop/csf/Smart_House/logo_led.jpg");
+        QPixmap image("C:/Users/WADII/STM32CubeIDE/workspace_1.13.2/smart/QT/logo_led.jpg");
         int w = ui->image_led->width();
         int h = ui->image_led->height();
         ui->image_led->setPixmap(image.scaled(w, h, Qt::KeepAspectRatio));

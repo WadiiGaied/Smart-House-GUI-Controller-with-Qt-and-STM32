@@ -118,10 +118,14 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-  HAL_PWR_EnableSleepOnExit();
+  //HAL_PWR_EnableSleepOnExit();
   if(HAL_TIM_PWM_Start_DMA(&htim1,TIM_CHANNEL_1,(uint32_t *) &PwmData,1)!= HAL_OK){ /// bich ntastiy tim1 y5dem wila lee
 
 	  Error_Handler();
+  }
+  if(HAL_TIM_Base_Start(&htim6)!=HAL_OK) // bich ntastiy tim6 y5dim wila lee
+  {
+   	Error_Handler();
   }
   HAL_UART_Receive_IT(&huart2, &QtRxData, sizeof(QtRxData));
   /* USER CODE END 2 */
