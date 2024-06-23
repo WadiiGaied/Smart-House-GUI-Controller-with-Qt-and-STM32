@@ -31,7 +31,17 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define DELAY_1S 1000U
+#define DELAY_18MS 18000U
+#define DELAY_20US 20U
+#define DELAY_40US 20U
+#define DELAY_80US 80U
+#define MAX_INTENSITY 10U
+#define MIN_INTENSITY 0U
+#define INCREMENT_STEP 2U
+#define QTTX_DATA_SIZE 4U
+#define TEMP_BYTE_SIZE 1U
+#define HUM_BYTE_SIZE 1U
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -54,10 +64,10 @@ uint8_t Humidity = 0;
 uint8_t Presence = 0 ;
 
 uint8_t QtRxData ;
-uint8_t QtTxData[4];
+uint8_t QtTxData[QTTX_DATA_SIZE];
 
-uint8_t Pas = 2 ;
-uint8_t Intensite ;
+uint8_t Pas = INCREMENT_STEP ;
+uint8_t Intensity ;
 uint8_t PwmData = 0 ;
 
 /* USER CODE END PV */
@@ -70,14 +80,15 @@ static void MX_TIM6_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
-static void send_data_uart(uint8_t *data, uint8_t size);
+static void Send_Data_Uart(uint8_t *data, uint8_t size);
 static void Micro_Delay(uint16_t time);
-static void Set_Pin_output(GPIO_TypeDef *GPIOx,uint16_t GPIO_Pin);
+static void Set_Pin_Output(GPIO_TypeDef *GPIOx,uint16_t GPIO_Pin);
 static void Set_Pin_Input(GPIO_TypeDef *GPIOx,uint16_t GPIO_Pin);
 static void Dht11_Start (void);
+static void Dht11_Fct(void);
 static uint8_t Check_Response (void);
 static uint8_t Dht11_Read (void);
-static void Dht11_Fct(void);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -118,16 +129,20 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-  //HAL_PWR_EnableSleepOnExit();
-  if(HAL_TIM_PWM_Start_DMA(&htim1,TIM_CHANNEL_1,(uint32_t *) &PwmData,1)!= HAL_OK){ /// bich ntastiy tim1 y5dem wila lee
+
+  if(HAL_TIM_PWM_Start_DMA(&htim1,TIM_CHANNEL_1,(uint32_t *) &PwmData,SET)!= HAL_OK)
+  {
 
 	  Error_Handler();
   }
-  if(HAL_TIM_Base_Start(&htim6)!=HAL_OK) // bich ntastiy tim6 y5dim wila lee
+  if(HAL_TIM_Base_Start(&htim6)!=HAL_OK)
   {
    	Error_Handler();
   }
-  HAL_UART_Receive_IT(&huart2, &QtRxData, sizeof(QtRxData));
+  if (HAL_UART_Receive_IT(&huart2, &QtRxData, sizeof(QtRxData))!= HAL_OK)
+  {
+	  Error_Handler();
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -140,7 +155,7 @@ int main(void)
 	  Dht11_Fct();
 	  QtTxData[0] = Temperature;
 	  QtTxData[1] = Humidity ;
-	  send_data_uart(QtTxData, sizeof(QtTxData));
+	  Send_Data_Uart(QtTxData, sizeof(QtTxData));
   }
   /* USER CODE END 3 */
 }
@@ -384,7 +399,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-static void send_data_uart(uint8_t *data, uint8_t size)
+static void Send_Data_Uart(uint8_t *data, uint8_t size)
 {
 	   HAL_UART_Transmit(&huart2,  data, size, HAL_MAX_DELAY);
 }
@@ -392,47 +407,54 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance == USART2)
 	  {
-		  HAL_UART_Receive_IT(&huart2, &QtRxData, sizeof(QtRxData));
+		 if ( HAL_UART_Receive_IT(&huart2, &QtRxData, sizeof(QtRxData)) != HAL_OK )
+		 {
+			 Error_Handler();
+		 }
 
-		 if( QtRxData == '1' )
+		 if( QtRxData == 'O' )
 			 {
 
-			 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET); // Turn on LED
-			 QtTxData[2] = 1  ;
+			 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
+			 QtTxData[2] =  SET ;
 
 			 }
-	     else if( QtRxData == '0' )
+	     else if( QtRxData == 'F' )
 			 {
 
-		     HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET); // Turn off LED
-			 QtTxData[2] = 0  ;
+		     HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
+			 QtTxData[2] = RESET  ;
 
 			 }
 	     else if ( QtRxData == 'P' )
 	     {
-	    	 Intensite += Pas;
-	    	 if (Intensite > 10)
-	    	 Intensite = 10;
-	    	 QtTxData[3] = Intensite ;
-	    	 PwmData = Intensite ;
+	    	 Intensity += Pas;
+	    	 if (Intensity > MAX_INTENSITY)
+	    	 {
+	    	 Intensity = MAX_INTENSITY;
+	    	 }
+	    	 QtTxData[3] = Intensity ;
+	    	 PwmData = Intensity ;
 	     }
 	     else if ( QtRxData == 'M' )
 	     {
-	    	 Intensite -= Pas;
-	    	 if (Intensite < 0)
-	    	 Intensite = 0;
-	    	 QtTxData[3] = Intensite ;
-	    	 PwmData = Intensite ;
+	    	 Intensity -= Pas;
+	    	 if (Intensity < MIN_INTENSITY)
+	    	 {
+	    	 Intensity = MIN_INTENSITY;
+	    	 }
+	    	 QtTxData[3] = Intensity ;
+	    	 PwmData = Intensity ;
 	     }
 	  }
 }
 static void Micro_Delay(uint16_t time){
-	  __HAL_TIM_SET_COUNTER(&htim6, 0);
+	  __HAL_TIM_SET_COUNTER(&htim6, RESET);
 	  while (__HAL_TIM_GET_COUNTER(&htim6) < time);
 }
-static void Set_Pin_output(GPIO_TypeDef *GPIOx,uint16_t GPIO_Pin)
+static void Set_Pin_Output(GPIO_TypeDef *GPIOx,uint16_t GPIO_Pin)
 {
-GPIO_InitTypeDef GPIO_InitStruct = {0};
+GPIO_InitTypeDef GPIO_InitStruct = {GPIO_PIN_RESET};
 GPIO_InitStruct.Pin = GPIO_Pin;
 GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 GPIO_InitStruct.Pull = GPIO_PULLUP;
@@ -442,7 +464,7 @@ HAL_GPIO_Init(GPIOx, &GPIO_InitStruct);
 
 static void Set_Pin_Input(GPIO_TypeDef *GPIOx,uint16_t GPIO_Pin)
 {
-GPIO_InitTypeDef GPIO_InitStruct = {0};
+GPIO_InitTypeDef GPIO_InitStruct = {GPIO_PIN_RESET};
 GPIO_InitStruct.Pin = GPIO_Pin;
 GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -451,27 +473,27 @@ HAL_GPIO_Init(GPIOx, &GPIO_InitStruct);
 }
 static void Dht11_Start (void)
 {
-	Set_Pin_output(  DHT11_GPIO_Port, DHT11_Pin );
-	HAL_GPIO_WritePin( DHT11_GPIO_Port, DHT11_Pin, 1 );   // pull the pin high
-	HAL_Delay(1000);
-	HAL_GPIO_WritePin( DHT11_GPIO_Port, DHT11_Pin, 0 );   // pull the pin low
-	Micro_Delay(18000);
-	HAL_GPIO_WritePin( DHT11_GPIO_Port, DHT11_Pin, 1 );   // pull the pin high
-	Micro_Delay(20);
+	Set_Pin_Output(  DHT11_GPIO_Port, DHT11_Pin );
+	HAL_GPIO_WritePin( DHT11_GPIO_Port, DHT11_Pin, GPIO_PIN_SET );   // pull the pin high
+	HAL_Delay(DELAY_1S);
+	HAL_GPIO_WritePin( DHT11_GPIO_Port, DHT11_Pin, GPIO_PIN_RESET );   // pull the pin low
+	Micro_Delay(DELAY_18MS);
+	HAL_GPIO_WritePin( DHT11_GPIO_Port, DHT11_Pin, GPIO_PIN_SET );   // pull the pin high
+	Micro_Delay(DELAY_20US);
 	Set_Pin_Input( DHT11_GPIO_Port, DHT11_Pin );
 }
 
 
 static uint8_t Check_Response (void)
 {
-	uint8_t Response = 0;
-	Micro_Delay(40);
+	uint8_t Response = RESET ;
+	Micro_Delay(DELAY_40US);
 	if (!(HAL_GPIO_ReadPin (DHT11_GPIO_Port, DHT11_Pin)))
 	{
-	 Micro_Delay(80);
+	 Micro_Delay(DELAY_80US);
 		if ((HAL_GPIO_ReadPin (DHT11_GPIO_Port, DHT11_Pin)))
 		{
-			Response = 1;
+			Response = SET;
 		}
 		else
 	    {
@@ -489,7 +511,7 @@ static uint8_t Dht11_Read (void)
 	for (j=0;j<8;j++)
 	{
 		while (!(HAL_GPIO_ReadPin (DHT11_GPIO_Port, DHT11_Pin)));   // wait for the pin to go high
-		Micro_Delay(40);   // wait for 40 us
+		Micro_Delay(DELAY_40US);   // wait for 40 us
 		if (!(HAL_GPIO_ReadPin (DHT11_GPIO_Port, DHT11_Pin)))   // if the pin is low
 		{
 			i&= ~(1<<(7-j));   // write 0

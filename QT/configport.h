@@ -17,8 +17,8 @@ public:     //méthodes de la classe Arduino
     QSerialPort* getserial();   // accesseur
     QString getarduino_port_name();
     int i = 0 ;
-    static const quint16 stm32_vendor_id= 1659; //6790 ;
-    static const quint16 stm32_producy_id= 8963; //29987;
+    static const quint16 stm32_vendor_id= 1027; //6790 ;
+    static const quint16 stm32_producy_id= 24577; //29987;
 private:
 
     QByteArray data  ;  // contenant les données lues à partir stm32
