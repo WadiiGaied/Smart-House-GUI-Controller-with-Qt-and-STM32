@@ -12,7 +12,6 @@ public:     //méthodes de la classe Arduino
     int connect_carte(); // permet de connecter le PC à Carte
     int close_carte(); // permet de femer la connexion
     void write_to_carte( QByteArray ); // envoyer des données vers Carte
-    void write_to_carte_test(int);
     int* read_from_carte();  //recevoir des données de la carte Carte
     QSerialPort* getserial();   // accesseur
     QString getarduino_port_name();

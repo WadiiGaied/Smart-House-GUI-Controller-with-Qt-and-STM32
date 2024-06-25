@@ -108,13 +108,13 @@ void HOME::update_label()
 
 void HOME::on_button_on_led_clicked()
 {
-    S.write_to_carte("1");
+    S.write_to_carte("O");
 }
 
 
 void HOME::on_button_off_led_clicked()
 {
-   S.write_to_carte("0");
+   S.write_to_carte("F");
 }
 
 
@@ -129,24 +129,12 @@ void HOME::on_button_sortie_clicked()
 
 void HOME::on_button_plus_clim_clicked()
 {
-    S.write_to_carte("P");
-   /* intensite += PAS;
-    ui->lcd_fan->display(intensite);
-    if (intensite > 10){
-        intensite = 10;
-        ui->lcd_fan->display(intensite);
-    }*/
+S.write_to_carte("P");
 }
 
 
 void HOME::on_button_mois_clim_clicked()
 {
     S.write_to_carte("M");
-   /* intensite -= PAS;
-    ui->lcd_fan->display(intensite);
-    if (intensite < 0){
-        intensite = 0;
-        ui->lcd_fan->display(intensite);
-    }*/
 }
 

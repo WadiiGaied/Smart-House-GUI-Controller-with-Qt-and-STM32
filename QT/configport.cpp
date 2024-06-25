@@ -76,20 +76,7 @@ void STM32::write_to_carte( QByteArray d)
         qDebug() << "Couldn't write to serial!";
     }
 }
-void STM32::write_to_carte_test(int value1)
-{
-    if (serial->isWritable())
-    {
-        QByteArray byteArray;
-        byteArray.append(static_cast<unsigned char>(value1));
 
-        serial->write(byteArray);  // envoyer la valeur convertie en QByteArray
-    }
-    else
-    {
-        qDebug() << "Couldn't write to serial!";
-    }
-}
 
 int STM32::connect_carte()
 {   // recherche du port sur lequel la carte stm32 identifée par  stm32_vendor_id

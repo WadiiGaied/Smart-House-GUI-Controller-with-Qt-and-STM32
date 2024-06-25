@@ -16,8 +16,7 @@ public:
     explicit HOME(QWidget *parent = nullptr);
     ~HOME();
     int ret ;
-     int PAS = 2 ;
-    int intensite ;
+
 
 private slots:
     void update_label();

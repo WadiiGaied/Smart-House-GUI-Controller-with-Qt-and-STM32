@@ -34,14 +34,13 @@
 #define DELAY_1S 1000U
 #define DELAY_18MS 18000U
 #define DELAY_20US 20U
-#define DELAY_40US 20U
+#define DELAY_40US 40U
 #define DELAY_80US 80U
 #define MAX_INTENSITY 10U
 #define MIN_INTENSITY 0U
 #define INCREMENT_STEP 2U
 #define QTTX_DATA_SIZE 4U
-#define TEMP_BYTE_SIZE 1U
-#define HUM_BYTE_SIZE 1U
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -68,7 +67,7 @@ uint8_t QtTxData[QTTX_DATA_SIZE];
 
 uint8_t Pas = INCREMENT_STEP ;
 uint8_t Intensity ;
-uint8_t PwmData = 0 ;
+int PwmData = 0 ;
 
 /* USER CODE END PV */
 
@@ -129,7 +128,8 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, GPIO_PIN_RESET);
   if(HAL_TIM_PWM_Start_DMA(&htim1,TIM_CHANNEL_1,(uint32_t *) &PwmData,SET)!= HAL_OK)
   {
 
@@ -290,7 +290,7 @@ static void MX_TIM6_Init(void)
   htim6.Instance = TIM6;
   htim6.Init.Prescaler = 50-1;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 0xfff-1;
+  htim6.Init.Period = 0xffff-1;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
   {
@@ -373,12 +373,17 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(DHT11_GPIO_Port, DHT11_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, GREEN_Pin|ORANGE_Pin|RED_Pin|BLUE_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10|GREEN_Pin|ORANGE_Pin|RED_Pin
+                          |BLUE_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6|GPIO_PIN_7, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : DHT11_Pin */
   GPIO_InitStruct.Pin = DHT11_Pin;
@@ -387,12 +392,21 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(DHT11_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : GREEN_Pin ORANGE_Pin RED_Pin BLUE_Pin */
-  GPIO_InitStruct.Pin = GREEN_Pin|ORANGE_Pin|RED_Pin|BLUE_Pin;
+  /*Configure GPIO pins : PD10 GREEN_Pin ORANGE_Pin RED_Pin
+                           BLUE_Pin */
+  GPIO_InitStruct.Pin = GPIO_PIN_10|GREEN_Pin|ORANGE_Pin|RED_Pin
+                          |BLUE_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB6 PB7 */
+  GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
@@ -415,14 +429,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		 if( QtRxData == 'O' )
 			 {
 
-			 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
+			 HAL_GPIO_WritePin(GPIOD,GPIO_PIN_10 , GPIO_PIN_SET);
 			 QtTxData[2] =  SET ;
 
 			 }
 	     else if( QtRxData == 'F' )
 			 {
 
-		     HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
+		     HAL_GPIO_WritePin(GPIOD,GPIO_PIN_10 , GPIO_PIN_RESET);
 			 QtTxData[2] = RESET  ;
 
 			 }
