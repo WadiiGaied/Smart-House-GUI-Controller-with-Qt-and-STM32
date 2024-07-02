@@ -2,18 +2,19 @@
 
 ## Description
 
-Smart House est un projet visant à contrôler la climatisation et l'éclairage d'une maison intelligente. Il affiche également la température et l'humidité via une interface utilisateur développée avec Qt.
+Smart House is a project aimed at controlling the air conditioning and lighting of a smart home. It also displays temperature and humidity via a user interface developed with Qt.
 
-## Matériel Utilisé
+## Hardware Used
 
-- Carte STM32Discovery
-- Capteur DHT11 (pour mesurer la température et l'humidité)
-- LED (pour l'éclairage)
-- Moteur (pour la climatisation)
-- Adaptateur FTDI (pour la communication série entre la carte STM32 et l'interface graphique)
+- STM32Discovery Board
+- DHT11 Sensor (for measuring temperature and humidity)
+- LED (for lighting)
+- Motor (for air conditioning)
+- FTDI Adapter (for serial communication between the STM32 board and the graphical interface)
 
-## Fonctionnalités
+## Features
 
-- **Contrôle de la climatisation** : Régule la température de la pièce en activant ou désactivant le moteur de climatisation.
-- **Contrôle de l'éclairage** : Allume ou éteint les LED.
-- **Affichage des mesures environnementales** : Affiche en temps réel la température et l'humidité sur une interface Qt.
+- **Air Conditioning Control**: Regulates room temperature by activating or deactivating the air conditioning motor.
+- **Lighting Control**: Turns LEDs on or off.
+- **Environmental Measurements Display**: Real-time display of temperature and humidity on a Qt interface.
+
