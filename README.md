@@ -1,10 +1,5 @@
 
-cree un readmi github pour projet smart_hous  cette projet controle la climatisation et lumiere et affiche la temperture et humidity atraver interface QT  , materile carte stm32discaviry ,dh11 ,led un moteur pour la climatisation
-ChatGPT
-Voici un exemple de fichier README pour votre projet "Smart House". Vous pouvez le personnaliser davantage selon vos besoins spécifiques :
 
-markdown
-Copier le code
 # Smart House
 
 ## Description
