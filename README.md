@@ -17,4 +17,8 @@ Smart House is a project aimed at controlling the air conditioning and lighting 
 - **Air Conditioning Control**: Regulates room temperature by activating or deactivating the air conditioning motor.
 - **Lighting Control**: Turns LEDs on or off.
 - **Environmental Measurements Display**: Real-time display of temperature and humidity on a Qt interface.
+  
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
