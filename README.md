@@ -1,4 +1,4 @@
-# Smart House
+# Smart-House-GUI-Controller-with-Qt-and-STM32
 
 ## Description
 
