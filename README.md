@@ -8,7 +8,7 @@ Smart House est un projet visant à contrôler la climatisation et l'éclairage 
 
 ## Matériel Utilisé
 
-- Carte STM32Discovery
+- Carte STM32F4DISCOVERY
 - Capteur DHT11 (pour mesurer la température et l'humidité)
 - LED (pour l'éclairage)
 - Moteur (pour la climatisation)
@@ -19,9 +19,4 @@ Smart House est un projet visant à contrôler la climatisation et l'éclairage 
 - **Contrôle de l'éclairage** : Allume ou éteint les LED.
 - **Affichage des mesures environnementales** : Affiche en temps réel la température et l'humidité sur une interface Qt.
 
-## Prérequis
 
-- [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html) pour développer et flasher le firmware sur la carte STM32Discovery.
-- [Qt](https://www.qt.io/download) pour le développement de l'interface utilisateur.
-- Bibliothèque de capteur DHT11 pour STM32.
-- Bibliothèque de contrôle du moteur et des LED pour STM32.
