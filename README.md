@@ -6,10 +6,10 @@ Smart House is a project aimed at controlling the air conditioning and lighting 
 
 ## Hardware Used
 
-- STM32Discovery Board
+- STM32F407G-DISC1 Board
 - DHT11 Sensor (for measuring temperature and humidity)
 - LED (for lighting)
-- Motor (for air conditioning)
+- Motor N20 (for air conditioning)
 - FTDI Adapter (for serial communication between the STM32 board and the graphical interface)
 
 ## Key Functionalities
